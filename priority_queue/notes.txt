@@ -1,0 +1,24 @@
+class Node():
+
+    def __init__(self, value, priority):
+        self.value = value
+        self.priority = priority
+
+
+class APQ():
+    """
+    Ascending Priority Queue: elements with lower values have higher priority
+    Operations:
+    - enqueue(): inserts an elemnt and puts it in the right place
+    - deque() returns the smallest element
+    - peek(): returns the topmost element i.e. smallest
+    """
+
+
+class DPQ():
+    """
+    Descending Priority Queue: elements with higher values have higher priority
+    - enqueue(): inserts an elemnt and puts it in the right place
+    - deque() returns the highest element
+    - peek(): returns the topmost element i.e. highest
+    """
