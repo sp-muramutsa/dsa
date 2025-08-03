@@ -15,7 +15,7 @@ def reservoir_sampling(data: list, k: int) -> list:
         if iterator < k:
             reservoir.append(data[iterator])
         
-        # Step 2: Iterate till the end, replacing elements with the probability P(replacement) = iterator / k
+        # Step 2: Iterate till the end, replacing elements with the probability P(replacement) = k / iterator
         else:
             # Pick a random index in the range 0 to iterator for replacement
             idx = random.randint(0, iterator)
