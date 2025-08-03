@@ -19,6 +19,7 @@ class Graph:
         self.nodes = set()
         self.relationships = defaultdict(set)
         self.time = 0
+        self.topological_sort_list = []
 
     def add_node(self, node) -> None:
         self.nodes.add(node)
@@ -92,6 +93,22 @@ graph.add_edges(marakech, amsterdam)
 graph.add_edges(london, tokyo)
 graph.add_edges(ibiza, tokyo)
 
+"""
+       Zanzibar
+           |
+        Kigali
+           |
+      Barcelona
+           |
+         Tokyo
+        /     \
+     London   Ibiza
+        |       |
+    Amsterdam marakesh
+        \       /
+         -------
+
+"""
 
 print(graph.get_neighbors(kigali))
 print(graph.get_neighbors(tokyo))
