@@ -22,8 +22,6 @@ class Graph:
     def __init__(self) -> None:
         self.nodes = set()
         self.relationships = defaultdict(set)
-        self.time = 0
-        self.topological_sort_list = []
 
     def add_node(self, node) -> None:
         self.nodes.add(node)
