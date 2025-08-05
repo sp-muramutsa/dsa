@@ -1,0 +1,63 @@
+from bfs import single_source_bfs
+from dfs import dfs
+from graph import Graph, Node
+from topological_sort import dfs_topo, khan, find_all_topological_orderings
+from dijkstra import dijkstra
+
+if __name__ == "__main__":
+    kigali = Node("Kigali")
+    barcelona = Node("Barcelona")
+    zanzibar = Node("Zanzibar")
+    london = Node("London")
+    tokyo = Node("Tokyo")
+    amsterdam = Node("Amsterdam")
+    ibiza = Node("Ibiza")
+    marakech = Node("Marakesh")
+
+    nodes = [kigali, barcelona, zanzibar, london, tokyo, amsterdam, ibiza, marakech]
+
+    # Undirected graph (for BFS, DFS, Dijkstra)
+    undirected_graph = Graph(directed=False)
+    for node in nodes:
+        undirected_graph.add_node(node)
+
+    undirected_graph.add_edge(kigali, barcelona, 4)
+    undirected_graph.add_edge(kigali, zanzibar, 2)
+    undirected_graph.add_edge(london, amsterdam, 1)
+    undirected_graph.add_edge(ibiza, marakech, 7)
+    undirected_graph.add_edge(tokyo, barcelona, 3)
+    undirected_graph.add_edge(marakech, amsterdam, 2)
+    undirected_graph.add_edge(london, tokyo, 6)
+    undirected_graph.add_edge(ibiza, tokyo, 5)
+
+    print("Undirected graph loaded with nodes and edges.")
+
+    bfs_result = single_source_bfs(undirected_graph, kigali)
+    print("BFS traversal:", bfs_result)
+
+    print("\nDFS traversal output:")
+    dfs(undirected_graph)
+
+    print("\nDijkstra's shortest path")
+    dijkstra(undirected_graph)
+
+    # Directed graph (for topological sorts)
+    directed_graph = Graph(directed=True)
+    for node in nodes:
+        directed_graph.add_node(node)
+
+    directed_graph.add_edge(kigali, barcelona, 4)
+    directed_graph.add_edge(kigali, zanzibar, 2)
+    directed_graph.add_edge(london, amsterdam, 1)
+    directed_graph.add_edge(ibiza, marakech, 7)
+    directed_graph.add_edge(tokyo, barcelona, 3)
+    directed_graph.add_edge(marakech, amsterdam, 2)
+    directed_graph.add_edge(london, tokyo, 6)
+    directed_graph.add_edge(ibiza, tokyo, 5)
+
+    print("\nDirected graph loaded with nodes and edges.")
+
+    print("\nTopological sorts:")
+    dfs_topo(directed_graph)
+    khan(directed_graph)
+    find_all_topological_orderings(directed_graph)

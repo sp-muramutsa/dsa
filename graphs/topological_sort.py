@@ -1,156 +1,109 @@
+from collections import deque
 from typing import List
-from collections import defaultdict, deque
+from graph import Graph, Node  # Import your existing classes for typing, optional
 
 
-class Node:
-    def __init__(self, value) -> None:
-        self.value = value
-        self.visited = False
-        self.in_degree = 0
-
-    def __repr__(self):
-        return self.value
+def reset_visitation(graph: Graph):
+    for node in graph.nodes:
+        node.visited = False
 
 
-class DAG:
-    def __init__(self) -> None:
-        self.nodes = defaultdict(set)
-        self.topological_ordering = deque()
-        self.all_topological_orderings = []
-        self.khan_topological_ordering = []
+def dfs_topo(graph: Graph):
+    """
+    DFS-based topological sort. Prints ordering.
+    """
+    ordering = deque()
 
-    def add_node(self, node) -> None:
-        self.nodes[node] = set()
-
-    def add_directed_edge(self, source: Node, destination: Node) -> None:
-        destination.in_degree += 1
-        self.nodes[source].add(destination)
-
-    def get_neighbors(self, node: Node) -> List[Node]:
-        return self.nodes[node]
-
-    def reset_visitation(self):
-        for node in self.nodes:
-            node.visited = False
-
-    def topological_sort(self):
-
-        for node in self.nodes:
-            if not node.visited:
-                self.dfs(node)
-        print(self.topological_ordering)
-
-    def dfs(self, node: Node):
+    def dfs_visit(node: Node):
         node.visited = True
-        for neighbor in self.get_neighbors(node):
+        for neighbor in graph.get_neighbors(node):
             if not neighbor.visited:
-                self.dfs(neighbor)
-        self.topological_ordering.appendleft(node)
+                dfs_visit(neighbor)
+        ordering.appendleft(node)
 
-    def khan(self):
-        """
-        Implementation of Khan's alogrithm to find a valid topological ordering of a directed graph or to detect a cyle if any is present.
-        """
+    reset_visitation(graph)
+    for node in graph.nodes:
+        if not node.visited:
+            dfs_visit(node)
 
-        q = deque()
-        for node in self.nodes:
-            if node.in_degree == 0:
-                q.append(node)
+    print("Topological ordering (DFS):", list(ordering))
+    return ordering
 
-        while q:
 
-            # Process front node
-            curr = q.popleft()
-            self.khan_topological_ordering.append(curr)
-            curr.visited = True
+def khan(graph: Graph):
+    """
+    Khan's algorithm for topological sorting.
+    Prints ordering or detects cycle.
+    """
+    # Recompute in_degree for all nodes before starting
+    for node in graph.nodes:
+        node.in_degree = 0
+    for node in graph.nodes:
+        for neighbor in graph.get_neighbors(node):
+            neighbor.in_degree += 1
 
-            # Reduce in degree of neighobrs
-            for neighbor in self.get_neighbors(curr):
-                neighbor.in_degree -= 1
+    q = deque()
+    for node in graph.nodes:
+        if node.in_degree == 0:
+            q.append(node)
 
-                # Push ready nodes to the queue
-                if neighbor.in_degree == 0 and not neighbor.visited:
-                    q.append(neighbor)
+    ordering = []
+    reset_visitation(graph)
 
-        # Detect cyle
-        for node in self.nodes:
-            if not node.visited:
-                print("Graph is cyclic. No valid topological ordering.")
-                self.khan_topological_ordering = []
-                return
+    while q:
+        curr = q.popleft()
+        ordering.append(curr)
+        curr.visited = True
 
-        print(self.khan_topological_ordering)
+        for neighbor in graph.get_neighbors(curr):
+            neighbor.in_degree -= 1
+            if neighbor.in_degree == 0 and not neighbor.visited:
+                q.append(neighbor)
 
-    def find_all_topological_orderings(self, path):
-        """
-        Uses backtracking to print all valid topological orderings of a DAG.
-        """
+    if len(ordering) != len(graph.nodes):
+        print("Graph is cyclic. No valid topological ordering.")
+        return []
 
-        if len(path) == len(self.nodes):
-            # print(path)
-            self.all_topological_orderings.append(path[:])
+    print("Topological ordering (Khan):", ordering)
+    return ordering
+
+
+def find_all_topological_orderings(graph: Graph):
+    """
+    Find and return all possible topological orderings via backtracking.
+    """
+    # Recompute in_degree for all nodes before starting
+    for node in graph.nodes:
+        node.in_degree = 0
+    for node in graph.nodes:
+        for neighbor in graph.get_neighbors(node):
+            neighbor.in_degree += 1
+
+    all_orderings = []
+
+    def backtrack(path: List[Node]):
+        if len(path) == len(graph.nodes):
+            all_orderings.append(path[:])
             return
 
-        for node in self.nodes:
-
+        for node in graph.nodes:
             if node.in_degree == 0 and not node.visited:
-
-                # Visit node
-                for neighbor in self.get_neighbors(node):
+                for neighbor in graph.get_neighbors(node):
                     neighbor.in_degree -= 1
                 path.append(node)
                 node.visited = True
 
-                # Recur
-                self.find_all_topological_orderings(path)
+                backtrack(path)
 
-                # Backtrack i.e. reset
-                for neighbor in self.get_neighbors(node):
+                for neighbor in graph.get_neighbors(node):
                     neighbor.in_degree += 1
                 path.pop()
                 node.visited = False
 
+    reset_visitation(graph)
+    backtrack([])
 
-kigali = Node("Kigali")
-barcelona = Node("Barcelona")
-zanzibar = Node("Zanzibar")
-london = Node("London")
-tokyo = Node("Tokyo")
-amsterdam = Node("Amsterdam")
-ibiza = Node("Ibiza")
-marakech = Node("Marakesh")
-
-nodes = [kigali, barcelona, zanzibar, london, tokyo, amsterdam, ibiza, marakech]
-graph = DAG()
-
-for node in nodes:
-    graph.add_node(node)
-
-graph.add_directed_edge(kigali, barcelona)
-graph.add_directed_edge(kigali, zanzibar)
-graph.add_directed_edge(london, amsterdam)
-graph.add_directed_edge(ibiza, marakech)
-graph.add_directed_edge(tokyo, barcelona)
-graph.add_directed_edge(marakech, amsterdam)
-graph.add_directed_edge(london, tokyo)
-graph.add_directed_edge(ibiza, tokyo)
-
-"""
-
-Kigali -> Barcelona  <-  Tokyo
-       -> Zanzibar       * *
-       ------------------  |
-     /                     |
-London -> Amsterdam        |
-           |               |
-Ibiza -> Marakech          |
-|---------------------------
-"""
-
-graph.topological_sort()
-graph.reset_visitation()
-graph.find_all_topological_orderings([])
-print(f"\nTotal topological orderings: {len(graph.all_topological_orderings)}")
-graph.reset_visitation()
-
-graph.khan()
+    print(f"Total topological orderings: {len(all_orderings)}")
+    # for ordering in all_orderings:
+    #     print(ordering)
+    return all_orderings

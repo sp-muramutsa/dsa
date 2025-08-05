@@ -1,4 +1,4 @@
-from bfs import Node, Graph
+from graph import Node, Graph
 
 
 class UnionFind:
