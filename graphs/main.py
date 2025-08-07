@@ -3,6 +3,7 @@ from dfs import dfs
 from graph import Graph, Node
 from topological_sort import dfs_topo, khan, find_all_topological_orderings
 from dijkstra import dijkstra
+from mst import MST
 
 if __name__ == "__main__":
     kigali = Node("Kigali")
@@ -61,3 +62,17 @@ if __name__ == "__main__":
     dfs_topo(directed_graph)
     khan(directed_graph)
     find_all_topological_orderings(directed_graph)
+
+    print("\nTopological sorts:")
+    dfs_topo(directed_graph)
+    khan(directed_graph)
+    find_all_topological_orderings(directed_graph)
+
+    print("\nPrim's MST:")
+
+    # Add edges to fully connect the graph so we can find the MST
+    undirected_graph.add_edge(zanzibar, london, 3)
+    undirected_graph.add_edge(amsterdam, ibiza, 4)
+
+    mst = MST(undirected_graph)
+    cost, edges = mst.prims(kigali)
