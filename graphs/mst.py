@@ -64,5 +64,57 @@ class MST:
 
         return (mst_cost, mst_edges)
 
+    def eager_prims(self, source: Node):
+
+        n = len(self.graph.nodes)
+        m = n - 1
+
+        edge_count, mst_cost = 0, 0
+        mst_edges = []
+
+        visited = set()
+        min_cost = {node: float("inf") for node in self.graph.nodes}
+        parents = {node: None for node in self.graph.nodes}
+        heap = []
+
+        min_cost[source] = 0
+        heapq.heappush(heap, (0, source))
+
+        # Relax edges at source
+
+        while heap and edge_count < m:
+
+            cost, node = heapq.heappop(heap)
+
+            if cost > min_cost[node]:
+                continue  # Outdated entry
+
+            if node in visited:
+                continue
+
+            visited.add(node)
+            if parents[node] is not None:
+                mst_edges.append((parents[node], node, cost))
+                mst_cost += cost
+                edge_count += 1
+
+            # Relax edges at
+            for dest in self.graph.edges[node]:
+                if dest not in visited:
+                    edge_cost = self.graph.costs[(node, dest)]
+
+                    if edge_cost < min_cost[dest]:
+                        min_cost[dest] = edge_cost
+                        parents[dest] = node
+                        heapq.heappush(heap, (edge_cost, dest))
+
+        print("MST cost: ", mst_cost)
+        print("MST edges in order (Eager Prim's); ", mst_edges)
+        if edge_count != m:
+            print("No MST found")
+            return (None, None)
+
+        return (mst_cost, mst_edges)
+
     def kruskals(self):
         pass

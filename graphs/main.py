@@ -76,3 +76,4 @@ if __name__ == "__main__":
 
     mst = MST(undirected_graph)
     cost, edges = mst.prims(kigali)
+    cost, edges = mst.eager_prims(kigali)
