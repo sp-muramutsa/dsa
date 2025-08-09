@@ -2,7 +2,7 @@ from bfs import single_source_bfs
 from dfs import dfs
 from graph import Graph, Node
 from topological_sort import dfs_topo, khan, find_all_topological_orderings
-from dijkstra import dijkstra
+from spp import bellman_ford, dijkstra, dijkstra_sspp
 from mst import MST
 
 if __name__ == "__main__":
@@ -40,7 +40,15 @@ if __name__ == "__main__":
     dfs(undirected_graph)
 
     print("\nDijkstra's shortest path")
-    dijkstra(undirected_graph)
+    dijkstra_sspp(undirected_graph, kigali)
+
+    print("\nBellman Ford's shortest path from Kigali")
+    bellman_ford(undirected_graph, kigali)
+
+    negative_graph = undirected_graph
+    negative_graph.add_edge(tokyo, zanzibar, 4)
+    print("\nBellman Ford's shortest path from Kigali (with negative weights)")
+    bellman_ford(undirected_graph, kigali)
 
     # Directed graph (for topological sorts)
     directed_graph = Graph(directed=True)
