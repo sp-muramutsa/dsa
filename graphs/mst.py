@@ -65,6 +65,9 @@ class MST:
         return (mst_cost, mst_edges)
 
     def eager_prims(self, source: Node):
+        """
+        Optimized prim's algorithm. Uses parent hashmap to simulate an IPQ.
+        """
 
         n = len(self.graph.nodes)
         m = n - 1

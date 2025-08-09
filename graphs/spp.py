@@ -46,14 +46,25 @@ def bellman_ford(graph, source: Node) -> Dict[Node, int]:
 
     # Relax all edges for |V| - 1 times
     for _ in range(n):
+        updated = False
         for u in graph.edges:
+            # Skip unreachable nodes in this round
+            if distances[u] == float("inf"):
+                continue
+
             for v in graph.edges[u]:
                 new_dist = distances[u] + graph.costs[(u, v)]
                 if new_dist < distances[v]:
                     distances[v] = new_dist
+                    updated = True
+
+        if not updated:
+            break
 
     # Check for nodes stuck in a negative cycle
     for u in graph.edges:
+        if distances[u] == float("inf"):
+            continue
         for v in graph.edges[u]:
             new_dist = distances[u] + graph.costs[(u, v)]
             if new_dist < distances[v]:
