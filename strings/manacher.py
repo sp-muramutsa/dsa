@@ -1,9 +1,7 @@
 def manacher(s: str) -> None:
     """
-    Manacher's Algorithm for finding all palindrom substrings in constant time
+    Manacher's Algorithm for finding all palindrom substrings in linear time
     """
-
-    palindromes = []
 
     t = "^#"
     for char in s:
