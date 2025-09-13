@@ -5,25 +5,21 @@ def knapsack_01(values: List[int], weights: List[int], bag_size: int) -> None:
 
     # Make a 2D table
     n = len(values)
-
-    if n != len(weights):
-        raise ValueError("length of values must equal length of weights")
-
     dp = [[0] * (bag_size + 1) for _ in range(n + 1)]
 
     # Fill the table
     for i in range(1, n + 1):
-        for curr_weight in range(1, bag_size + 1):
+        for w in range(1, bag_size + 1):
 
             # Choose
             choose = 0
-            if curr_weight >= weights[i - 1]:
-                choose = values[i - 1] + dp[i - 1][curr_weight - weights[i - 1]]
+            if w >= weights[i - 1]:
+                choose = values[i - 1] + dp[i - 1][w - weights[i - 1]]
 
             # Don't choose
-            not_choose = dp[i - 1][curr_weight]
+            not_choose = dp[i - 1][w]
 
-            dp[i][curr_weight] = max(choose, not_choose)
+            dp[i][w] = max(choose, not_choose)
 
     # Get maximum possible profit under constraints
     print("Maximum profit that can be made is: ", dp[-1][-1])
@@ -42,5 +38,37 @@ def knapsack_01(values: List[int], weights: List[int], bag_size: int) -> None:
     print("\n")
 
 
+def knapsack_01_optimized(values: List[int], weights: List[int], bag_size: int) -> None:
+    """
+    Space: O(n) space
+    """
+
+    dp = [0] * (bag_size + 1)
+    n = len(values)
+    included = [False] * n
+    choice = [-1] * (bag_size + 1)
+
+    for i in range(n):
+        for w in range(bag_size, weights[i] - 1, -1):
+            if dp[w - weights[i]] + values[i] > dp[w]:
+                dp[w] = dp[w - weights[i]] + values[i]
+                choice[w] = i
+
+    print("Maximum profit that can be made is: ", dp[-1])
+
+    curr_w = bag_size
+    while curr_w > 0 and choice[curr_w] != -1:
+        chosen_idx = choice[curr_w]
+        included[chosen_idx] = True
+        curr_w -= weights[chosen_idx]
+
+    print("Binary description of inclusion: ", included)
+    print("\n")
+
+
 knapsack_01([0, 10, 50, 20, 40, 20], [3, 2, 4, 2, 1, 9], 12)
+knapsack_01_optimized([0, 10, 50, 20, 40, 20], [3, 2, 4, 2, 1, 9], 12)
+
+
 knapsack_01([1, 2, 5, 6], [2, 3, 4, 5], 8)
+knapsack_01_optimized([1, 2, 5, 6], [2, 3, 4, 5], 8)
