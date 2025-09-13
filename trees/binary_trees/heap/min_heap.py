@@ -20,82 +20,86 @@ each node is less than its children.
 
     9. build_min_heap(list): Get a range of all parents and heapify each of them down.
 """
+
+
 class MinHeap:
     def __init__(self):
         self.heap = []
-    
+
     def __str__(self):
         return str(self.heap)
-    
+
     def _parent(self, index):
         if index == 0:
             return None
         return (index - 1) // 2
-    
-    
+
     def _left_child(self, index):
         left_child_index = 2 * index + 1
 
         if left_child_index >= len(self.heap):
             return None
         return left_child_index
-      
-    
+
     def _right_child(self, index):
         right_child_index = (2 * index) + 2
 
         if right_child_index >= len(self.heap):
             return None
         return right_child_index
-    
+
     def _insert(self, value):
         self.heap.append(value)
         self._heapify_up(len(self.heap) - 1)
-    
+
     def _heapify_up(self, index):
         while index > 0:
             parent_index = self._parent(index)
             if self.heap[index] < self.heap[parent_index]:
-                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+                self.heap[index], self.heap[parent_index] = (
+                    self.heap[parent_index],
+                    self.heap[index],
+                )
                 index = parent_index
             else:
                 break
-    
+
     def _heapify_down(self, index):
         while True:
             left = self._left_child(index)
             right = self._right_child(index)
             smallest = index
-            
 
             if left is not None and self.heap[left] < self.heap[smallest]:
                 smallest = left
-            
+
             if right is not None and self.heap[right] < self.heap[smallest]:
                 smallest = right
-            
+
             if smallest != index:
-                self.heap[smallest], self.heap[index] = self.heap[index], self.heap[smallest]
+                self.heap[smallest], self.heap[index] = (
+                    self.heap[index],
+                    self.heap[smallest],
+                )
                 index = smallest
             else:
-                break     
-        
+                break
 
-    def _extract_min(self):  
+    def _extract_min(self):
         if not self.heap:
             return None
-    
+
         root = self.heap[0]
         self.heap[0] = self.heap[-1]
         self.heap.pop()
         if self.heap:
             self._heapify_down(0)
         return root
-    
+
     def _delete(self, index):
         if index >= len(self.heap):
-            return 
-        
+            return
+
         self.heap[index] = self.heap[-1]
         self.heap.pop()
 
@@ -105,17 +109,16 @@ class MinHeap:
             self._heapify_up(index)
         else:
             self._heapify_down(index)
-        
+
         return True
 
-    
     def build_min_heap(self, arr):
         self.heap = arr
         n = len(arr)
 
         for i in range(n // 2 - 1, -1, -1):
             min_heap._heapify_down(i)
-        
+
         return self
 
 

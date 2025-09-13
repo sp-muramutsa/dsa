@@ -10,7 +10,7 @@ Implementation of a priority queue using a linked list. Ascending order of prior
 from typing import Optional
 
 
-class Node():
+class Node:
 
     def __init__(self, value, priority):
         self.value = value
@@ -18,7 +18,7 @@ class Node():
         self.next = None
 
 
-class PriorityQueue():
+class PriorityQueue:
     def __init__(self):
         self.front = None
 
@@ -29,7 +29,7 @@ class PriorityQueue():
         return self.front
 
     def enqueue(self, node: Node) -> None:
-        
+
         if self.empty():
             self.front = node
             return
@@ -42,17 +42,16 @@ class PriorityQueue():
             curr = self.front
             while curr.next and curr.next.priority <= node.priority:
                 curr = curr.next
-            
+
             temp = curr.next
             curr.next = node
-            node.next = temp      
-
+            node.next = temp
 
     def dequeue(self) -> Optional[Node]:
-        
+
         if self.empty():
             raise Exception("can't dequeue from an empty priority queue")
-        
+
         temp = self.front
         self.front = self.front.next
         return temp
@@ -84,6 +83,3 @@ pq.traverse()
 pq.enqueue(Node("Salah", 4))
 
 pq.traverse()
-
-  
-

@@ -9,7 +9,7 @@ def bucket_sort(arr):
 
         for bucket in buckets:
             bucket.sort()
-    
+
     index = 0
     for bucket in buckets:
         for num in bucket:

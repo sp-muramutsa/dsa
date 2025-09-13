@@ -6,19 +6,21 @@ class Node:
         self.left = None
         self.right = None
 
-# Insertion      
-# def insert(root, key):  
+
+# Insertion
+# def insert(root, key):
 #     if root is None:
 #         return Node(key)
-    
+
 #     elif root.value == key:
 #         return root
-    
+
 #     if root.value < key:
 #         root.right = insert(root.right, key)
 #     else:
 #         root.left = insert(root.left, key)
 #     return root
+
 
 def insert(root, key):
     new_node = Node(key)
@@ -26,7 +28,7 @@ def insert(root, key):
     if root is None:
         root = new_node
         return root
-    
+
     curr = root
     parent = root
 
@@ -35,30 +37,30 @@ def insert(root, key):
         if curr.value > key:
             curr = curr.left
         else:
-            curr = curr.right 
+            curr = curr.right
 
     if parent.value < key:
         parent.right = new_node
     else:
         parent.left = new_node
 
-    return root  
-    
-        
+    return root
+
 
 # In-order traversal: Left-Root-Right
 # def inorder(root):
 #     if root is None:
-#         return  
-   
+#         return
+
 #     inorder(root.left)
 #     print(root.value, end="  ->  ")
 #     inorder(root.right)
 
+
 def inorder(root):
     if root is None:
         return
-    
+
     curr = root
     while curr:
         print(curr.left.value, end="  ->  ")
@@ -68,24 +70,23 @@ def inorder(root):
             curr = curr.left
         else:
             curr = curr.right
-    
 
-        
 
 # Pre-order traversal: Root-Left-Right
 def preorder(root):
     if root is None:
         return
-    
+
     print(root.value, end="  ->  ")
     preorder(root.left)
     preorder(root.right)
+
 
 # Post-order traversal: Left-Right-Root
 def postorder(root):
     if root is None:
         return
-    
+
     postorder(root.left)
     postorder(root.right)
     print(root.value, end="  ->  ")
@@ -108,5 +109,3 @@ inorder(r)
 # print("\n")
 # print("Post-order")
 # postorder(r)
-
-    

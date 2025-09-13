@@ -1,22 +1,24 @@
 # Binary Search Tree
 
+
 class Node:
     def __init__(self, key):
         self.value = key
         self.left = None
         self.right = None
 
+
 # INSERTING INTO A BST
-# Time: O(height) height is O(log2(n+1))  or O(n) in case the tree is skewed i.e linked list.  
+# Time: O(height) height is O(log2(n+1))  or O(n) in case the tree is skewed i.e linked list.
 # Space: O(1)
-# Recursive insert. 
+# Recursive insert.
 # def insert(root, key):
 #     if root is None:
 #         return Node(key)
-    
+
 #     elif root.value == key:
 #         return root
-    
+
 #     if root.value < key:
 #         root.right = insert(root.right, key)
 #     else:
@@ -30,7 +32,7 @@ def insert(root, key):
 
     if root is None:
         return new_node
-    
+
     curr = root
     parent = root
 
@@ -42,22 +44,24 @@ def insert(root, key):
             curr = curr.left
         else:
             curr = curr.right
-        
+
     if parent.value > key:
         parent.left = new_node
     else:
         parent.right = new_node
-    
+
     return root
+
 
 # In-order: Left -> Root -> Right
 def inorder(root):
     if root is None:
         return
-    
+
     inorder(root.left)
-    print(root.value, end = " --> ")
+    print(root.value, end=" --> ")
     inorder(root.right)
+
 
 # SEARCHING IN A BST
 # Time idem au insert
@@ -71,18 +75,19 @@ def inorder(root):
 #         return False
 #     elif root.value == key:
 #         return True
-    
+
 #     # Recursive
 #     elif root.value < key:
 #         return search(root.right, key)
 #     else:
 #         return search(root.left, key)
 
+
 # Iterative search
 def search(root, key):
     if root is None:
         return False
-    
+
     curr = root
 
     while curr:
@@ -92,35 +97,36 @@ def search(root, key):
             curr = curr.right
         else:
             curr = curr.left
-    
+
     return False
+
 
 # DELETING FROM A BST
 # Recursive delete
 def delete(root, key):
     # Base Case
     if root is None:
-        return  root
-    
+        return root
+
     # Recursive case: Traverse the tree to find what node to delete
     if root.value > key:
         root.left = delete(root.left, key)
     elif root.value < key:
         root.right = delete(root.right, key)
-    
+
     # When it's the right node to delete
     else:
         # Case 1: leaf node
         if root.left is None and root.right is None:
             return None
-        
+
         # Case 2: One child
         if root.left is None:
             return root.right
-        
+
         if root.right is None:
             return root.left
-        
+
         # Case 3: 2 children. The node is replaced by it's inorder successor(min to the right) or inorder predecessor(max to the left)
         # Using inorder successor(min to the right)
         # successor = get_inorder_successor(root.right)
@@ -134,10 +140,11 @@ def delete(root, key):
 
     return root
 
+
 def height(root):
     if not root:
-        return 0 
-    
+        return 0
+
     left_height = height(root.left)
     right_height = height(root.right)
 
@@ -150,32 +157,33 @@ def get_inorder_successor(node):
         node = node.left
     return node
 
+
 # Utility function to find inorder predecessor(max to the left)
 def get_inorder_predecessor(node):
     while node.right is not None:
         node = node.right
     return node
 
+
 # Iterative
 def print_level_order(root):
     h = height(root)
-    for i in range(1, h+1):
+    for i in range(1, h + 1):
         print_current_level(root, i)
+
 
 def print_current_level(root, level):
     if root is None:
         return
-    
-    # Base case 
+
+    # Base case
     if level == 1:
         print(root.value, end=" ")
-    
+
     # Recursive case
     elif level > 1:
-        print_current_level(root.left, level-1)
-        print_current_level(root.right, level-1)
-
-    
+        print_current_level(root.left, level - 1)
+        print_current_level(root.right, level - 1)
 
 
 r = Node(50)
